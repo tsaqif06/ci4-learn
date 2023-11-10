@@ -9,19 +9,22 @@
                 <?= csrf_field() ?>
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="title">
+                    <input type="text" value="<?= old('title') ?>" class="form-control <?= ($validation->hasError('title')) ? 'is-invalid' : '' ?>" id="title" name="title">
+                    <div class="invalid-feedback">
+                        <?= $validation->getError('title') ?>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="author" class="form-label">Author</label>
-                    <input type="text" class="form-control" id="author" name="author">
+                    <input type="text" value="<?= old('author') ?>" class="form-control" id="author" name="author">
                 </div>
                 <div class="mb-3">
                     <label for="publisher" class="form-label">Publisher</label>
-                    <input type="text" class="form-control" id="publisher" name="publisher">
+                    <input type="text" value="<?= old('publisher') ?>" class="form-control" id="publisher" name="publisher">
                 </div>
                 <div class="mb-3">
                     <label for="cover" class="form-label">Cover</label>
-                    <input type="text" class="form-control" id="cover" name="cover">
+                    <input type="text" value="<?= old('cover') ?>" class="form-control" id="cover" name="cover">
                 </div>
                 <!-- <div class="mb-3">
                     <label for="cover" class="form-label">Comic Cover</label>

@@ -41,6 +41,7 @@ class Comics extends BaseController
     {
         $data = [
             'title' => "Add | CI4LEARN",
+            'validation' => \Config\Services::validation(),
         ];
 
         return view('comics/create', $data);
@@ -48,6 +49,25 @@ class Comics extends BaseController
 
     public function store()
     {
+        $rules = [
+            // 'title' => 'required|is_unique[comics.title]',
+
+            //custom
+            'title' => [
+                'rules' => 'required|is_unique[comics.title]',
+                'errors' => [
+                    'required' => '{field} comic is required',
+                    'is_unique' => '{field} comic is registered',
+                ]
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            $validation = \Config\Services::validation();
+            return redirect()->to('/comics/create')->withInput()->with('validation', $validation);
+        }
+
+
         $this->comicModel->save([
             'title' => $this->request->getVar('title'),
             'slug' => url_title($this->request->getVar('title'), '-', true),
