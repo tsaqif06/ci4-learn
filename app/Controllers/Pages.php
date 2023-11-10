@@ -10,17 +10,34 @@ class Pages extends BaseController
             'title' => "Home | CI4LEARN",
             'tes' => ["satu", "dua", "tiga"]
         ];
-        echo view('layout/header', $data);
-        echo view('pages/home');
-        echo view('layout/footer');
+        return view('pages/home', $data);
     }
+
     public function about()
     {
         $data = [
             'title' => "About | CI4LEARN"
         ];
-        echo view('layout/header', $data);
-        echo view('pages/about');
-        echo view('layout/footer');
+        return view('pages/about', $data);
+    }
+
+    public function contact()
+    {
+        $data = [
+            'title' => "Contact Us | CI4LEARN",
+            'alamat' => [
+                [
+                    'tipe' => 'Rumah',
+                    'alamat' => 'Jl. Kawi',
+                    'daerah' => 'Kab. Malang',
+                ],
+                [
+                    'tipe' => 'Pondok',
+                    'alamat' => 'Jl. Kasin',
+                    'daerah' => 'Kota Malang',
+                ],
+            ]
+        ];
+        return view('pages/contact', $data);
     }
 }
