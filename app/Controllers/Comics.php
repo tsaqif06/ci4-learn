@@ -64,7 +64,7 @@ class Comics extends BaseController
 
         if (!$this->validate($rules)) {
             $validation = \Config\Services::validation();
-            return redirect()->to('/comics/create')->withInput()->with('validation', $validation);
+            return redirect()->back()->withInput()->with('validation', $validation);
         }
 
 
@@ -118,7 +118,7 @@ class Comics extends BaseController
 
         if (!$this->validate($rules)) {
             $validation = \Config\Services::validation();
-            return redirect()->to('/comics/create')->withInput()->with('validation', $validation);
+            return redirect()->back()->withInput()->with('validation', $validation);
         }
 
         $this->comicModel->save([
