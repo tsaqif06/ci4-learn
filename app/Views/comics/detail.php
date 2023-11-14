@@ -16,8 +16,14 @@
                             <p class="card-text"><b>Author : </b> <?= $comic['author'] ?></p>
                             <p class="card-text"><small class="text-body-secondary"><b>Penerbit : </b> <?= $comic['publisher'] ?></small></p>
 
-                            <a href="" class="btn btn-warning">Edit</a>
-                            <a href="" class="btn btn-danger">Delete</a>
+                            <a href="/comics/edit/<?= $comic['slug'] ?>" class="btn btn-warning">Edit</a>
+
+                            <form action="/comics/<?= $comic['id'] ?>" method="post" class="d-inline">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this data?')">Delete</button>
+                            </form>
+
                             <br><br>
                             <a href="/comics"><-- Back to comics list</a>
                         </div>
