@@ -154,7 +154,7 @@ class Comics extends BaseController
         } else {
             $coverName = $coverFile->getRandomName();
             if ($oldCoverName != 'default.jpg') {
-                unlink("img/$oldCoverName");git 
+                unlink("img/$oldCoverName");
             }
 
             $coverFile->move('img', $coverName);
