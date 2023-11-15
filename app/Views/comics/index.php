@@ -21,15 +21,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $i = 1 ?>
                     <?php foreach ($comics as $comic) : ?>
                         <tr>
-                            <th scope="row"><?= $comic['id'] ?></th>
+                            <th scope="row"><?= $i ?></th>
                             <td><img src="/img/<?= $comic['cover'] ?>" width="100" alt="<?= $comic['slug'] ?>"></td>
                             <td><?= $comic['title'] ?></td>
                             <td>
                                 <a href="/comics/<?= $comic['slug'] ?>" class="btn btn-success">Detail</a>
                             </td>
                         </tr>
+                        <?php $i++ ?>
                     <?php endforeach ?>
                 </tbody>
             </table>

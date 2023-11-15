@@ -50,21 +50,39 @@ class Comics extends BaseController
     public function store()
     {
         $rules = [
-            // 'title' => 'required|is_unique[comics.title]',
-
-            //custom
             'title' => [
                 'rules' => 'required|is_unique[comics.title]',
                 'errors' => [
                     'required' => '{field} comic is required',
                     'is_unique' => '{field} comic is registered',
                 ]
-            ]
+            ],
+            // 'cover' => [
+            //     'rules' => 'uploaded[cover]|max_size[cover,1024]|ext_in[cover,jpg,png,gif]',
+            //     'errors' => [
+            //         'uploaded' => 'Please choose a {field} file',
+            //         'max_size' => 'The {field} file size should not exceed 1MB',
+            //         'ext_in' => 'Invalid file type. Only JPG, PNG, and GIF are allowed for {field}',
+            //     ],
+            // ],
         ];
 
         if (!$this->validate($rules)) {
             $validation = \Config\Services::validation();
             return redirect()->back()->withInput()->with('validation', $validation);
+        }
+
+        // get file
+        $coverFile = $this->request->getFile('cover');
+
+        if ($coverFile->getError() == 4) {
+            $coverName = 'default.jpg';
+        } else {
+            // generate random name
+            $coverName = $coverFile->getRandomName();
+
+            // move file
+            $coverFile->move('img', $coverName);
         }
 
 
@@ -73,7 +91,7 @@ class Comics extends BaseController
             'slug' => url_title($this->request->getVar('title'), '-', true),
             'author' => $this->request->getVar('author'),
             'publisher' => $this->request->getVar('publisher'),
-            'cover' => $this->request->getVar('cover'),
+            'cover' => $coverName,
         ]);
 
         session()->setFlashdata('message', 'New comic stored succesfully');
@@ -94,6 +112,12 @@ class Comics extends BaseController
 
     public function delete($id)
     {
+        $comic = $this->comicModel->find($id);
+
+        if ($comic['cover'] != 'default.jpg') {
+            unlink("img/{$comic['cover']}");
+        }
+
         $this->comicModel->delete($id);
         return redirect()->to('/comics');
     }
@@ -119,6 +143,21 @@ class Comics extends BaseController
         if (!$this->validate($rules)) {
             $validation = \Config\Services::validation();
             return redirect()->back()->withInput()->with('validation', $validation);
+            // return redirect()->back()->withInput();
+        }
+
+        $coverFile = $this->request->getFile('cover');
+        $oldCoverName = $this->request->getVar('oldCoverName');
+
+        if ($coverFile->getError() == 4) {
+            $coverName = $oldCoverName;
+        } else {
+            $coverName = $coverFile->getRandomName();
+            if ($oldCoverName != 'default.jpg') {
+                unlink("img/$oldCoverName");git 
+            }
+
+            $coverFile->move('img', $coverName);
         }
 
         $this->comicModel->save([
@@ -127,7 +166,7 @@ class Comics extends BaseController
             'slug' => url_title($this->request->getVar('title'), '-', true),
             'author' => $this->request->getVar('author'),
             'publisher' => $this->request->getVar('publisher'),
-            'cover' => $this->request->getVar('cover'),
+            'cover' => $coverName,
         ]);
 
         session()->setFlashdata('message', 'New comic stored succesfully');
